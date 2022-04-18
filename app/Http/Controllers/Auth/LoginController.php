@@ -69,6 +69,15 @@ class LoginController extends Controller
         //     'user_name'  =>  $user->name
         // ]));
 
+
+        // try {
+        //     // Validate the value...
+        // } catch (Throwable $e) {
+        //     report($e);
+
+        //     return false;
+        // }
+
         $request->session()->regenerate();
 
         return response()->json([
