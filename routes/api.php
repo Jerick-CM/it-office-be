@@ -29,6 +29,9 @@ Route::get('/login', LoginController::class);
 
 Route::post('/login', LoginController::class);
 
+Route::post('/send-token', [LoginController::class, 'sendToken']);
+Route::post('/verify', [LoginController::class, 'verify']);
+
 Route::post('/logout', function (Request $request) {
 
     event(new UserLogsEvent($request->user()->id, AdminUsersLogs::TYPE_USERS_LOGOUT, [

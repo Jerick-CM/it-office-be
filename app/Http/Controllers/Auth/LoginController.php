@@ -10,6 +10,10 @@ use App\Models\User;
 use App\Models\AdminUsersLogs;
 // event
 use App\Events\UserLogsEvent;
+// request
+use App\Http\Requests\VerifyRequest;
+// notification
+use App\Notifications\SendVerificationEmail;
 
 class LoginController extends Controller
 {
@@ -76,5 +80,38 @@ class LoginController extends Controller
             'success' => true,
             '_benchmark' => microtime(true) -  $this->time_start,
         ], 200);
+    }
+
+    public function sendToken(VerifyRequest $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            $token = $user->getToken();
+            $user->notify(new SendVerificationEmail($token));
+
+            return response()->json([
+                'success' => true,
+                '_benchmark' => microtime(true) -  $this->time_start,
+            ], 200);
+        }
+    }
+
+    public function verify(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if ($request->token == $user->verify_token)
+        {
+            return response()->json([
+                'sucess' => true,
+                '_benchmark' => microtime(true) -  $this->time_start
+            ]);
+        } else {
+            return response()->json([
+                'data' => 'Invalid Token.',
+                '_benchmark' => microtime(true) -  $this->time_start,
+            ], 401);
+        }
     }
 }

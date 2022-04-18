@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Role;
 
+use Illuminate\Support\Str;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
@@ -105,5 +107,21 @@ class User extends Authenticatable
     public function getFullnameAttribute()
     {
         return $this->attributes['name'];
+    }
+
+    public function generateToken()
+    {
+        $token = strtoupper(Str::random(6));
+        $this->verify_token = $token;
+        $this->save();
+
+        return $token;
+    }
+
+    public function getToken()
+    {
+        $token = $this->generateToken();
+        
+        return $token;
     }
 }
