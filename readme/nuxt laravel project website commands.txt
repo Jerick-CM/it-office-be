@@ -1,0 +1,239 @@
+php artisan route:list
+php artisan make:controller controllername
+sail artisan make:controller --resource PostController
+
+
+php artisan make:migration create_post_table --create="posts"
+
+php artisan migrate:rollback
+
+
+php artisan make:seeder UsersTableSeeder
+sail artisan make:seeder UsersTableSeeder
+
+php artisan db:seed
+
+
+2
+3
+
+php artisan make:models Posts
+
+php artisan make:models User_details
+
+php artisan make:models models name save to app/models
+
+php artisan make:factory UserDetailsFactory --model=User_details
+
+sail artisan make:controller --resource UserDetailsController
+
+sail composer require laravel/socialite
+
+
+?state=yrAjOY8kCu&code=4%2F0AY0e-g6nO3bG6trgO7to0ogNLCG4ubd7eAW5oGGvpFbD9BK_iDAioiqUgdnHZKa8_dc-CQ&scope=email%20profile%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=consent
+
+
+https://console.cloud.google.com/apis/credentials?project=project-website-314807
+
+http://localhost:3000/login?
+state=AIyxj7zl7k&
+code=4%2F0AY0e-g7mdONlT4iIiNrJswU4aUgn8V-67g9ojOVm1HisK1nycUkFZ7s7h67kmRbiloV7Eg&
+scope=email%20profile%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&
+authuser=0&
+prompt=consent
+
+
+
+https://accounts.google.com/signin/oauth/warning?authuser=0&part=AJi8hANaJCVUc1fqRd6u7idpZnJthIBMT_1eBjhUFJp4TbjWXj9U5CGhXGRmZBmghOkzdhIW2Mv7ZykoWDMDxU7T1xhOIbMcB4GLSWt_jpj-3LGqosB1OeA-cH6HQJAdf37E5NnhOpUci6c6Wp3HQxFTWgG3ZPRgjTTP6mA6ELB7li-cYTluF-ZNZNtdIp3FZZH_S35vgyyphbaXDRwzwaIa8qUvuIruwzaRWk_I7Kya_PuVJj52O0HrO4cuK-CKTea5A1qqiWcyJqs0h2Of2Av_7Zm_TE7DQak-xZbbjGBcjdCRNFg3RFFmWP2G_isDDMRDI58OtCgPZH4VEQPN9XAm4MEpo_NTk4HAZouEaPziEKRIZUK-2cwXkz9nMPo7fY_48ICG-9rKP8VH6Nbb5kxV-aCatQ_OfEbOXkB91CCqsNi12jFsqDde8A2fRP_9N3aglSuvG5z2z3efC34kVgsn13LeBPYZNA&as=S1997506154%3A1621940095491995&client_id=14757956463-i7pn4r8arrel30q04rh9htcmnf1aoaot.apps.googleusercontent.com&rapt=AEjHL4ON7LflsnbsUzws-708RIgniF4XOwoEjdJbdGTfsUug8pDBX4iRGpL7jYUkUJar1d_AeTNNNtr5mhvw6sfilrJdeWQSpQ#
+
+
+http://localhost:3000/callback?state=QzlXdoAhpt&code=4%2F0AY0e-g6jRKQqscJUMKucOhEHdYRfj7u23Q1kYT1MFiGBII2LxQjNbKr6gZhrAtTMSNEecg&scope=email%20profile%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=consent
+
+
+https://nuxt-auth.herokuapp.com/
+
+
+create seed for posts
+create factory for posts
+
+sail artisan make:seeder PostTableSeeder
+
+php sail  artisan make:factory PostFactory --model=Posts
+
+php sail artisan db:seed
+
+php artisan db:seed
+
+php artisan db:seed --class=UserSeeder
+
+
+php sail artisan make:model Role -m
+php sail artisan make:migration create_role_user_table --create=role_user
+
+php sail artisan migrate:rollback --step=1
+
+
+php sail  artisan make:factory RolesFactory
+php sail  artisan make:factory Roles_UsersFactory
+
+sail artisan make:seeder RolesTableSeeder
+sail artisan make:seeder Roles_UsersTableSeeder
+
+php sail artisan make:model Roles_Users
+
+
+php sail artisan db:seed --class=RolesTableSeeder
+php sail artisan db:seed --class=Roles_UsersTableSeeder
+
+php sail artisan make:controller --resource RoleController
+
+
+polymorphic relationship
+
+php sail artisan make:model Staff -m
+php sail artisan make:model Product -m
+php sail artisan make:model Photo -m
+
+php sail artisan make:controller ImageStaffProductsController
+
+
+php sail  artisan make:factory StaffFactory
+php sail  artisan make:factory ProductFactory
+
+
+sail artisan make:seeder StaffTableSeeder
+sail artisan make:seeder ProductTableSeeder
+
+php sail artisan db:seed --class=StaffTableSeeder
+php sail artisan db:seed --class=ProductTableSeeder
+
+
+php sail artisan make:model Post -m
+php sail artisan make:model Video -m
+php sail artisan make:model Tag -m
+php sail artisan make:model Taggable -m
+
+php sail artisan make:controller --resource TagVideoPostController
+
+php sail  artisan make:factory VideoFactory
+php sail  artisan make:factory TagFactory
+php sail artisan migrate:refresh --seed
+
+
+php sail artisan make:seeder TagSeeder
+php sail artisan make:seeder VideoSeeder
+
+php sail artisan db:seed --class=TagSeeder
+php sail artisan db:seed --class=VideoSeeder
+
+php sail artisan make:factory TaggableFactory
+php sail artisan make:seeder TaggableTableSeeder
+
+php sail artisan make:model Taggable
+
+php sail artisan db:seed --class=TaggableTableSeeder
+
+docker exec -it nuxt_client_nuxt-app
+
+
+php sail artisan make:migration add_slug_imagevideo_posts_table --create=role_user
+
+php sail artisan make:migration add_publish_text_in_posts_table
+
+
+php sail artisan make:migration create_messageoftheday_table --create=messageoftheday
+sail artisan make:controller --resource messageoftheday
+php sail artisan make:model messageoftheday
+
+php sail artisan make:seeder MessageoftheDayTableSeeder
+php sail artisan db:seed --class=MessageoftheDayTableSeeder
+
+
+php sail artisan make:migration create_messageoftheday_table --create=messageoftheday
+
+
+php sail artisan make:migration create_blog_table --create=blog
+php sail  artisan make:factory BlogFactory
+php sail artisan make:seeder BlogTableSeeder
+php sail artisan make:model Blog -m
+php sail artisan make:controller --resource BlogController
+sail php  artisan db:seed --class=BlogTableSeeder
+
+
+php artisan make:migration create_news_table --create=news
+php artisan make:factory NewsFactory
+php artisan make:seeder NewsTableSeeder
+php artisan make:model News -m
+sail artisan make:controller --resource NewsController
+php  artisan db:seed --class=NewsTableSeeder
+
+alias sail='bash vendor/bin/sail'
+
+sail artisan migrate
+
+
+php sail artisan make:migration add_ckeditorlog_in_repective_tables
+
+
+# create quotes table
+
+php sail artisan make:migration create_quotes_table --create=quotes
+php sail artisan make:factory QuotesFactory
+php sail artisan make:seeder QuotesTableSeeder
+php sail artisan make:model Quotes -m
+php sail artisan make:controller --resource QuotesController
+php sail artisan db:seed --class=QuotesTableSeeder
+
+php sail artisan db:seed --class=QuotesTableSeeder
+
+
+# create worldreminders
+
+php sail artisan make:migration create_earthreminders_table --create=earthreminders
+php sail artisan make:factory EarthRemindersFactory
+php sail artisan make:seeder EarthRemindersTableSeeder
+
+php sail artisan make:controller --resource EarthRemindersController
+
+php sail artisan db:seed --class=EarthRemindersTableSeeder
+
+php sail artisan migrate
+
+php artisan migrate:rollback --step=1
+
+
+sail artisan db:seed --class=EarthRemindersTableSeeder
+
+
+
+
+php sail artisan make:migration add_userrname_pimg_to_userdetails_table --create=user_details
+
+
+
+php sail artisan make:controller --resource Auth/GoogleController
+php sail artisan make:controller --resource Auth/GoogleController
+
+http://localhost:3001/auth/google/
+callback#
+state=xrU4RN7SX9
+&access_token=ya29.a0AfH6SMBFfcni6KuUsxZQSMFy6mz8waoIGYzSxNszYScNRR3I6WaDU2JOFI9TVSaM2s_D6lsfeiI2eTpp58940CI-HJWntpQnd0O6-AVLYzlqOEY_OcI0VJkG-QAQEpc1CG5I8TVWtcfPum7im_c87ruTN6cT
+&token_type=Bearer
+&expires_in=3599
+&scope=email%20profile%20openid%20https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5ZmUyYTdiNjc5NTIzOTYwNmNhMGE3NTA3OTRhN2JkOWZkOTU5NjEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjM1MzA3MTY3MjMzLW1paTZnZjJobzQ2MGdqMTF1aTV0dmI3dGVvMXJjcDNvLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjM1MzA3MTY3MjMzLW1paTZnZjJobzQ2MGdqMTF1aTV0dmI3dGVvMXJjcDNvLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyNDYxMTU2NTIxNDEzNjc2NjU4IiwiZW1haWwiOiJqbWFuZ2FsdXpAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJFLVBpZy1fSVU2S2NSbm1NTXJCTER3Iiwibm9uY2UiOiI1bkt4Q1ZIajV1IiwiaWF0IjoxNjI0MTE0NjAyLCJleHAiOjE2MjQxMTgyMDIsImp0aSI6IjUxNjQzYTQ4NGIwNzRmYzFhYjc3ZjIwYWQ3ZjVlYjdiMTE0MjJiZjIifQ.qeWr9SC37ESw_HZ98OvM8giTky69fVcBLhh3LwAx3kfmw0qQ2kzcO8C3SDaNSRmkLZIgPhEKKBcHQnRBNgF3OUag17Kzi-YA6_r8CwNncD6u6kIkZBH5c3sML4gUSt12jx0r5AyDJLl6d1LOweZ2UEslNlHWUXWIgoS9Sc29KXfpfZEdpDnOQQN7BsXXzAiVuitKMDDLgHcjcOsS2JNrHzjjwxazKVAim1B89DdassDOZdtRe3llxaJSmxcB_c604HUFRQJggseIrzdtR7CYHR5XZC14kPKJpdUNzxXbUcUF8cu1iqW1cOlKgd5C0nk152jz5f9yQOrhWXmtUPGIig
+&authuser=0&prompt=consent
+
+
+php sail artisan make:migration add_userrname_pimg_to_userdetails_table --create=user_details
+
+
+php sail artisan make:migration create_socials_table --create=socials
+php sail artisan make:model Socials -m
+
+
+php sail artisan make:controller --resource UsersController
+
+
+
+php sail artisan db:seed --class=Tagsblogs_blogsTableSeeder
+php sail artisan db:seed --class=TagsblogsTableSeeder

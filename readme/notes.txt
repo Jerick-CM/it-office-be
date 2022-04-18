@@ -1,0 +1,9 @@
+tcp:80, 443, 3000, 3001
+udp
+default-allow-http-egress
+default-allow-http-ingress
+
+
+
+	maida63@example.net
+    111111
