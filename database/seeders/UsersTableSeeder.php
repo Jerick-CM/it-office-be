@@ -14,6 +14,7 @@ class UsersTableSeeder extends Seeder
 
         $users =  DB::table('users')->insert([
             'name' => "superuser 1",
+            'username' => "superuser1",
             'email' => 'admin1@itoffice.com',
             'email_verified_at' => now(),
             'password' => bcrypt(env('MASTERPASSWORD1')),
@@ -28,6 +29,7 @@ class UsersTableSeeder extends Seeder
 
         $users =  DB::table('users')->insert([
             'name' => "superuser 2",
+            'username' => "superuser2",
             'email' => 'admin2@itoffice.com',
             'email_verified_at' => now(),
             'password' => bcrypt(env('MASTERPASSWORD2')),
@@ -42,6 +44,7 @@ class UsersTableSeeder extends Seeder
 
         $users =  DB::table('users')->insert([
             'name' => "superuser 3",
+            'username' => "superuser3",
             'email' => 'admin3@itoffice.com',
             'email_verified_at' => now(),
             'password' => bcrypt(env('MASTERPASSWORD3')),
@@ -56,6 +59,7 @@ class UsersTableSeeder extends Seeder
 
         $users =  DB::table('users')->insert([
             'name' => "superuser 4",
+            'username' => "superuser4",
             'email' => 'admin4@itoffice.com',
             'email_verified_at' => now(),
             'password' => bcrypt(env('MASTERPASSWORD4')),
@@ -69,6 +73,7 @@ class UsersTableSeeder extends Seeder
 
         $users =  DB::table('users')->insert([
             'name' => "superuser 5",
+            'username' => "superuser5",
             'email' => 'admin5@itoffice.com',
             'email_verified_at' => now(),
             'password' => bcrypt(env('MASTERPASSWORD5')),
