@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Events\ApproveLoginEvent;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,6 +17,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/broadcast', function () {
-    broadcast(new ApproveLoginEvent());
-});

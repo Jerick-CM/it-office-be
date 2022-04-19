@@ -14,19 +14,24 @@ class ApproveLoginEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $user;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
     }
 
     public function broadcastWith()
     {
-        return ['message' => 'test'];
+        return [
+            'userId' => $this->user->id,
+            'redirect' => '/dashboard'
+        ];
     }
 
     /**

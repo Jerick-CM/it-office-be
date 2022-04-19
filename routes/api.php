@@ -32,6 +32,9 @@ Route::post('/login', LoginController::class);
 Route::post('/send-token', [LoginController::class, 'sendToken']);
 Route::post('/verify', [LoginController::class, 'verify']);
 
+Route::post('/send-request', [LoginController::class, 'sendRequest']);
+Route::get('/broadcast/{id}', [LoginController::class, 'approveLogin']);
+
 Route::post('/logout', function (Request $request) {
 
     event(new UserLogsEvent($request->user()->id, AdminUsersLogs::TYPE_USERS_LOGOUT, [

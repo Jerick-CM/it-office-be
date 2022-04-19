@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 
 // models
 use App\Models\User;
+use App\Models\UserLogin;
 use App\Models\AdminUsersLogs;
 // event
 use App\Events\UserLogsEvent;
+use App\Events\ApproveLoginEvent;
 // request
 use App\Http\Requests\VerifyRequest;
 // notification
@@ -79,7 +81,7 @@ class LoginController extends Controller
 
         if ($request->token == $user->verify_token) {
             return response()->json([
-                'sucess' => true,
+                'success' => true,
                 '_benchmark' => microtime(true) -  $this->time_start
             ]);
         } else {
@@ -88,5 +90,33 @@ class LoginController extends Controller
                 '_benchmark' => microtime(true) -  $this->time_start,
             ], 401);
         }
+    }
+
+    public function sendRequest(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            $req = UserLogin::create([
+                'user_id' => $user->id
+            ]);
+
+            return response()->json([
+                'userId' => $user->id,
+                'message' => 'Login request sent!',
+                'success' => true,
+                '_benchmark' => microtime(true) -  $this->time_start
+            ]);
+        }
+    }
+
+    public function approveLogin(Request $request)
+    {
+        $req = UserLogin::find($request->id);
+        $req->is_approved = true;
+        $req->save();
+
+        // ApproveLoginEvent::broadcast(); 
+        broadcast(new ApproveLoginEvent());       
     }
 }
