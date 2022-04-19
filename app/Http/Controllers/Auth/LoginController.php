@@ -113,10 +113,11 @@ class LoginController extends Controller
     public function approveLogin(Request $request)
     {
         $req = UserLogin::find($request->id);
+        $user = $req->user;
         $req->is_approved = true;
         $req->save();
 
         // ApproveLoginEvent::broadcast(); 
-        broadcast(new ApproveLoginEvent());       
+        broadcast(new ApproveLoginEvent($user));       
     }
 }
