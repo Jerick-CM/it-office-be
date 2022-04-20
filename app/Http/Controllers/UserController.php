@@ -15,7 +15,7 @@ use App\Models\UserDetails;
 use App\Models\AdminUsersLogs;
 // event
 use App\Events\UserLogsEvent;
-
+use App\Events\ApproveLoginEvent;
 class UserController extends Controller
 {
     /**
@@ -525,8 +525,11 @@ class UserController extends Controller
     {
 
         $userlogin = UserLogin::where('id', $table_id)->first();
+        $user =  $userlogin->user;
         $userlogin->is_approved = 1;
         $userlogin->save();
+
+        broadcast(new ApproveLoginEvent($user));
 
         return response()->json([
             'success' => 1,

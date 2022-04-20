@@ -44,9 +44,9 @@ class LogController extends Controller
                 ->take($request->itemsPerPage)->get();
 
             $Data_count =  AdminUsersLogs::get();
-                // limit($limit)
-                // ->offset(($page - 1) * $limit)
-                // ->take($request->itemsPerPage)->get();
+            // limit($limit)
+            // ->offset(($page - 1) * $limit)
+            // ->take($request->itemsPerPage)->get();
 
         } else {
 
@@ -64,9 +64,9 @@ class LogController extends Controller
                 ->take($request->itemsPerPage)->get();
 
             $Data_count =  AdminUsersLogs::get();
-                // limit($limit)
-                // ->offset(($page - 1) * $limit)
-                // ->take($request->itemsPerPage)->get();
+            // limit($limit)
+            // ->offset(($page - 1) * $limit)
+            // ->take($request->itemsPerPage)->get();
         }
 
         $DataCs =   $Data->count();
@@ -92,9 +92,10 @@ class LogController extends Controller
     public function fetch(Request $request)
     {
         $reqs = UserLogin::with('user')->get();
-
+        $query = UserLogin::with('user')->toSql();
         return response()->json([
-            'requests' => $reqs
+            'requests' => $reqs,
+            'sql' => $query
         ]);
     }
 }
