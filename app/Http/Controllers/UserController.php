@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\UserDetails;
-
 use App\Models\AdminUsersLogs;
 // event
 use App\Events\UserLogsEvent;
@@ -519,6 +518,20 @@ class UserController extends Controller
             // 'total' =>  14,
             'skip' => $skip,
             'take' => $request->itemsPerPage
+        ], 200);
+    }
+
+    public function userlogin_approve(Request $request, $table_id)
+    {
+
+        $userlogin = UserLogin::where('id', $table_id)->first();
+        $userlogin->is_approved = 1;
+        $userlogin->save();
+
+        return response()->json([
+            'success' => 1,
+            'user' => $request->user(),
+            '_benchmark' => microtime(true) -  $this->time_start
         ], 200);
     }
 }

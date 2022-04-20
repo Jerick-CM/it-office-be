@@ -74,6 +74,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::group(['prefix' => 'userlogin', 'middleware' => 'throttle:500,1'], function () {
 
     Route::post('/datatable', [UserController::class, 'userlogin_datatable']);
+    Route::post('/approve/{id}', [UserController::class, 'userlogin_approve']);
 
 });
 
