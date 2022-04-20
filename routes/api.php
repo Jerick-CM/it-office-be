@@ -59,6 +59,8 @@ Route::post('/logout', function (Request $request) {
 
 Route::post('/register', [RegisterController::class, 'register']);
 
+Route::post('/fetch/requests', [LogController::class, 'fetch']);
+
 
 
 // Route::post('/register_admin', function (Request $request) {

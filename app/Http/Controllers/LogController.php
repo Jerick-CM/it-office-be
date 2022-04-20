@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AdminUsersLogs;
+use App\Models\UserLogin;
 use Carbon\Carbon;
 
 
@@ -86,5 +87,14 @@ class LogController extends Controller
             'skip' => $skip,
             'take' => $request->itemsPerPage
         ], 200);
+    }
+
+    public function fetch(Request $request)
+    {
+        $reqs = UserLogin::with('user')->get();
+
+        return response()->json([
+            'requests' => $reqs
+        ]);
     }
 }
