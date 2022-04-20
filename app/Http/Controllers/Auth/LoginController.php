@@ -18,7 +18,9 @@ use App\Http\Requests\VerifyRequest;
 use App\Notifications\SendVerificationEmail;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
 
@@ -80,6 +82,11 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($request->token == $user->verify_token) {
+
+            $user = User::where('email', $request->email)->first();
+            Auth::loginUsingId($user->id);
+            $request->session()->regenerate();
+
             return response()->json([
                 'success' => true,
                 '_benchmark' => microtime(true) -  $this->time_start
@@ -117,7 +124,7 @@ class LoginController extends Controller
         $req->is_approved = true;
         $req->save();
 
-        // ApproveLoginEvent::broadcast(); 
-        broadcast(new ApproveLoginEvent($user));       
+        // ApproveLoginEvent::broadcast();
+        broadcast(new ApproveLoginEvent($user));
     }
 }
