@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\UserLogin;
 use App\Models\UserDetails;
 
 use App\Models\AdminUsersLogs;
@@ -450,6 +451,74 @@ class UserController extends Controller
             'data' => $user,
             '_benchmark' => microtime(true) -  $this->time_start,
         ], 200);
+    }
 
+    public function userlogin_datatable(Request $request)
+    {
+
+        if ($request->page == 1) {
+            $skip = 0;
+        } else {
+            $skip = $request->page * $request->page;
+        }
+
+        $table = 'users';
+
+        if ($request->sortBy == ""  && $request->sortDesc == "") {
+
+            $page = $request->has('page') ? $request->get('page') : 1;
+
+            $limit = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 10;
+
+            $Data = UserLogin::join('users', 'users.id', '=', 'user_logins.user_id')
+                ->select('user_logins.*', 'users.email', 'users.name')
+                ->get();
+
+            $Data_count = User::join('role_user', 'role_user.user_id', '=', $table . '.id')
+                ->join('roles', 'roles.id', '=', 'role_user.role_id')
+                ->where([['users.name', 'LIKE', "%" . $request->search . "%"]])
+                ->orWhere([['users.email', 'LIKE', "%" . $request->search . "%"]])
+                ->get();
+        } else {
+
+            if ($request->sortDesc) {
+                $order = 'desc';
+            } else {
+                $order = 'asc';
+            }
+
+            $page = $request->has('page') ? $request->get('page') : 1;
+            $limit = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 10;
+
+            $Data = UserLogin::join('users', 'users.id', '=', 'user_logins.user_id')
+                ->select('user_logins.*', 'users.email', 'users.name')
+                ->get();
+
+            $Data_count = User::join('role_user', 'role_user.user_id', '=', $table . '.id')
+                ->join('roles', 'roles.id', '=', 'role_user.role_id')
+                ->where([['users.name', 'LIKE', "%" . $request->search . "%"]])
+                ->orWhere([['users.email', 'LIKE', "%" . $request->search . "%"]])
+                ->get();
+        }
+
+        $DataCs =   $Data->count();
+        $DataCount =  $Data_count->count();
+
+        foreach ($Data as $key => $value) {
+            $Data[$key]['created'] = Carbon::parse($value['created_at'])->isoFormat('MMM Do YYYY - HH:mm');
+            $Data[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('MMM Do YYYY - HH:mm');
+        }
+
+        if ($DataCs > 0 && $DataCount == 0) {
+            $DataCount =   $DataCs;
+        }
+
+        return response()->json([
+            'data' => $Data,
+            'total' =>  $DataCount,
+            // 'total' =>  14,
+            'skip' => $skip,
+            'take' => $request->itemsPerPage
+        ], 200);
     }
 }

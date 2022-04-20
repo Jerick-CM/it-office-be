@@ -71,7 +71,11 @@ Route::post('/register', [RegisterController::class, 'register']);
 //         '_elapsed_time' => $timeend,
 //     ], 200);
 // });
+Route::group(['prefix' => 'userlogin', 'middleware' => 'throttle:500,1'], function () {
 
+    Route::post('/datatable', [UserController::class, 'userlogin_datatable']);
+
+});
 
 Route::group(['prefix' => 'user', 'middleware' => 'throttle:500,1'], function () {
 
