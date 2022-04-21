@@ -21,6 +21,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
 
@@ -34,32 +35,44 @@ class LoginController extends Controller
 
         $input = $request->all();
 
-        $this->validate($request, [
+        if ($request->login == 2) {
 
-            'email' => 'required',
+            $user = User::where('email', $request->email)->first();
+            Auth::loginUsingId($user->id);
+            $request->session()->regenerate();
 
-            'password' => 'required',
-
-        ]);
-
-
-        $fieldType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        if (auth()->attempt(array($fieldType => $input['email'], 'password' => $input['password']))) {
-        } else {
             return response()->json([
-                'data' => 'Invalid Credentials.',
-                'success' => 0,
+                'success' => true,
+                '_benchmark' => microtime(true) -  $this->time_start
+            ]);
+
+        } else {
+            $this->validate($request, [
+
+                'email' => 'required',
+
+                'password' => 'required',
+
+            ]);
+
+            $fieldType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+            if (auth()->attempt(array($fieldType => $input['email'], 'password' => $input['password']))) {
+            } else {
+                return response()->json([
+                    'data' => 'Invalid Credentials.',
+                    'success' => 0,
+                    '_benchmark' => microtime(true) -  $this->time_start,
+                ], 401);
+            }
+
+            $request->session()->regenerate();
+
+            return response()->json([
+                // 'user' => $user,
+                'success' => 1,
                 '_benchmark' => microtime(true) -  $this->time_start,
-            ], 401);
+            ], 200);
         }
-
-        $request->session()->regenerate();
-
-        return response()->json([
-            // 'user' => $user,
-            'success' => 1,
-            '_benchmark' => microtime(true) -  $this->time_start,
-        ], 200);
     }
 
     public function sendToken(VerifyRequest $request)
@@ -81,11 +94,11 @@ class LoginController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if ($request->token == $user->verify_token) {
+        if ($request->code == $user->verify_token) {
 
-            $user = User::where('email', $request->email)->first();
-            Auth::loginUsingId($user->id);
-            $request->session()->regenerate();
+            // $user = User::where('email', $request->email)->first();
+            // Auth::loginUsingId($user->id);
+            // $request->session()->regenerate();
 
             return response()->json([
                 'success' => true,
@@ -93,6 +106,9 @@ class LoginController extends Controller
             ]);
         } else {
             return response()->json([
+                'request' => $request,
+                'r_token' =>$request->code,
+                'token' => $user->verify_token,
                 'data' => 'Invalid Token.',
                 '_benchmark' => microtime(true) -  $this->time_start,
             ], 401);
