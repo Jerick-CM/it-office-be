@@ -11,7 +11,7 @@ class UserLogin extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'is_approved'];
+    protected $fillable = ['user_id', 'is_approved','browser'];
 
     protected $appends = ['statusLabel'];
 

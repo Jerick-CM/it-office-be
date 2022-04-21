@@ -80,6 +80,7 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
+
             $token = $user->getToken();
             $user->notify(new SendVerificationEmail($token));
 
@@ -87,6 +88,23 @@ class LoginController extends Controller
                 'success' => true,
                 '_benchmark' => microtime(true) -  $this->time_start,
             ], 200);
+
+        }else{
+
+            // $users =  DB::table('users')->insert([
+            //     'name' => "noname",
+            //     'username' => "noname",
+            //     'email' => $request->email,
+            //     'email_verified_at' => now(),
+            //     'password' => bcrypt(env('MASTERPASSWORD1')),
+            //     'remember_token' => Str::random(10),
+            //     'is_admin' => 0,
+            // ]);
+
+            // \App\Models\UserDetails::factory(1)->create([
+            //     'user_id' =>  DB::getPdo()->lastInsertId()
+            // ]);
+
         }
     }
 
@@ -120,11 +138,15 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
+
             $req = UserLogin::create([
-                'user_id' => $user->id
+                'user_id' => $user->id,
+                'browser' => $request->browser
             ]);
 
             return response()->json([
+                'req' =>  $req,
+                'browser' => $request->browser,
                 'userId' => $user->id,
                 'message' => 'Login request sent!',
                 'success' => true,

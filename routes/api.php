@@ -30,6 +30,7 @@ Route::get('/login', LoginController::class);
 Route::post('/login', LoginController::class);
 
 Route::post('/send-token', [LoginController::class, 'sendToken']);
+
 Route::post('/verify', [LoginController::class, 'verify']);
 
 Route::post('/send-request', [LoginController::class, 'sendRequest']);
