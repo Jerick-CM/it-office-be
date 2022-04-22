@@ -116,12 +116,6 @@ class LogController extends Controller
     public function request_datatable(Request $request)
     {
 
-        if ($request->sortDesc) {
-            $order = 'desc';
-        } else {
-            $order = 'asc';
-        }
-
         $limit = $request->has('perPage') ? $request->get('perPage') : 10;
 
         $reqs = UserLogin::with('user')
@@ -134,7 +128,7 @@ class LogController extends Controller
 
         return response()->json([
             'page' => $request->page,
-            'req' => $request,
+            // 'req' => $request,
             'requests' => $reqs,
             'totalRecords' => $count,
             'rows' => $reqs,

@@ -84,6 +84,8 @@ Route::group(['prefix' => 'userlogin', 'middleware' => 'throttle:500,1'], functi
 
 Route::group(['prefix' => 'user', 'middleware' => 'throttle:500,1'], function () {
 
+    Route::post('/data-table', [UserController::class, 'data_table']);
+
     Route::post('/user_datatable', [UserController::class, 'user_datatable']);
 
     Route::post('/datatable', [UserController::class, 'datatable']);

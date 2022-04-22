@@ -16,6 +16,7 @@ use App\Models\AdminUsersLogs;
 // event
 use App\Events\UserLogsEvent;
 use App\Events\ApproveLoginEvent;
+
 class UserController extends Controller
 {
     /**
@@ -536,5 +537,26 @@ class UserController extends Controller
             'user' => $request->user(),
             '_benchmark' => microtime(true) -  $this->time_start
         ], 200);
+    }
+
+    public function data_table(Request $request)
+    {
+        $limit = $request->has('perPage') ? $request->get('perPage') : 10;
+
+        $reqs = User::orderBy('id', 'desc')
+            ->offset(($request->page - 1) * $limit)
+            ->take($request->perPage)
+            ->get();
+
+        $count =   User::get()->count();
+
+        return response()->json([
+            'page' => $request->page,
+            // 'req' => $request,
+            'requests' => $reqs,
+            'totalRecords' => $count,
+            'rows' => $reqs,
+        ]);
+
     }
 }
