@@ -541,6 +541,7 @@ class UserController extends Controller
 
     public function data_table(Request $request)
     {
+
         $limit = $request->has('perPage') ? $request->get('perPage') : 10;
 
         $reqs = User::orderBy('id', 'desc')
