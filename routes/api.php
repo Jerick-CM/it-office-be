@@ -62,8 +62,6 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 Route::post('/fetch/requests', [LogController::class, 'fetch']);
 
-
-
 // Route::post('/register_admin', function (Request $request) {
 //     $time_start = microtime(true);
 //     $time_end = microtime(true);
@@ -74,12 +72,14 @@ Route::post('/fetch/requests', [LogController::class, 'fetch']);
 //         '_elapsed_time' => $timeend,
 //     ], 200);
 // });
+
 Route::group(['prefix' => 'userlogin', 'middleware' => 'throttle:500,1'], function () {
 
     Route::post('/datatable', [UserController::class, 'userlogin_datatable']);
     Route::post('/approve/{id}', [UserController::class, 'userlogin_approve']);
     // Route::post('/approve/{id}',  [LoginController::class, 'approveLogin']);
 
+    Route::post('/data-table', [LogController::class, 'request_datatable']);
 });
 
 Route::group(['prefix' => 'user', 'middleware' => 'throttle:500,1'], function () {

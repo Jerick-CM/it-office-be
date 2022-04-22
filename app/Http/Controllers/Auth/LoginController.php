@@ -45,7 +45,6 @@ class LoginController extends Controller
                 'success' => true,
                 '_benchmark' => microtime(true) -  $this->time_start
             ]);
-
         } else {
             $this->validate($request, [
 
@@ -88,8 +87,7 @@ class LoginController extends Controller
                 'success' => true,
                 '_benchmark' => microtime(true) -  $this->time_start,
             ], 200);
-
-        }else{
+        } else {
 
             // $users =  DB::table('users')->insert([
             //     'name' => "noname",
@@ -125,7 +123,7 @@ class LoginController extends Controller
         } else {
             return response()->json([
                 'request' => $request,
-                'r_token' =>$request->code,
+                'r_token' => $request->code,
                 'token' => $user->verify_token,
                 'data' => 'Invalid Token.',
                 '_benchmark' => microtime(true) -  $this->time_start,
@@ -145,8 +143,8 @@ class LoginController extends Controller
             ]);
 
             return response()->json([
-                'req' =>  $req,
-                'browser' => $request->browser,
+
+
                 'userId' => $user->id,
                 'message' => 'Login request sent!',
                 'success' => true,

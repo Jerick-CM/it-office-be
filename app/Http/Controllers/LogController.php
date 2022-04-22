@@ -91,11 +91,53 @@ class LogController extends Controller
 
     public function fetch(Request $request)
     {
-        $reqs = UserLogin::with('user')->get();
-        $query = UserLogin::with('user')->toSql();
+
+        $order = 'desc';
+        if ($request->sortDesc) {
+            $order = 'desc';
+        } else {
+            $order = 'asc';
+        }
+
+        $reqs = UserLogin::with('user')
+            // ->where('is_approved',0)
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+        // $query = UserLogin::with('user')->toSql();
         return response()->json([
             'requests' => $reqs,
-            'sql' => $query
+            // 'sql' => $query
+        ]);
+    }
+
+
+    public function request_datatable(Request $request)
+    {
+
+        if ($request->sortDesc) {
+            $order = 'desc';
+        } else {
+            $order = 'asc';
+        }
+
+        $limit = $request->has('perPage') ? $request->get('perPage') : 10;
+
+        $reqs = UserLogin::with('user')
+            ->orderBy('id', 'desc')
+            ->offset(($request->page - 1) * $limit)
+            ->take($request->perPage)
+            ->get();
+
+        $count =   UserLogin::with('user')->get()->count();
+
+        return response()->json([
+            'page' => $request->page,
+            'req' => $request,
+            'requests' => $reqs,
+            'totalRecords' => $count,
+            'rows' => $reqs,
         ]);
     }
 }
