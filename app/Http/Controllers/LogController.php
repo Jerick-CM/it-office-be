@@ -142,6 +142,7 @@ class LogController extends Controller
 
             $count =   UserLogin::with('user')->get()->count();
             $query = 1;
+
         } else {
             $query = 2;
             $limit = $request->has('perPage') ? $request->get('perPage') : 10;
