@@ -542,22 +542,46 @@ class UserController extends Controller
     public function data_table(Request $request)
     {
 
-        $limit = $request->has('perPage') ? $request->get('perPage') : 10;
 
-        $reqs = User::orderBy('id', 'desc')
-            ->offset(($request->page - 1) * $limit)
-            ->take($request->perPage)
-            ->get();
+        if ($request->sort[0]['type'] == ""  ||  $request->sort[0]['field'] == "" ||   $request->sort[0]['type'] == "none") {
+            $limit = $request->has('perPage') ? $request->get('perPage') : 10;
 
-        $count =   User::get()->count();
+            $reqs = User::orderBy('is_admin', 'desc')
+                ->offset(($request->page - 1) * $limit)
+                ->take($request->perPage)
+                ->get();
+
+            foreach ($reqs as $key => $value) {
+
+                $reqs[$key]['created'] = Carbon::parse($value['created_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+                $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+            }
+
+            $count =   User::get()->count();
+        } else {
+
+            $limit = $request->has('perPage') ? $request->get('perPage') : 10;
+
+            $reqs = User::offset(($request->page - 1) * $limit)
+                ->take($request->perPage)
+                ->orderBy($request->sort[0]['field'], strtoupper($request->sort[0]['type']))
+                ->get();
+
+            foreach ($reqs as $key => $value) {
+
+                $reqs[$key]['created'] = Carbon::parse($value['created_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+                $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+            }
+
+            $count =   User::get()->count();
+        }
+
 
         return response()->json([
             'page' => $request->page,
-            // 'req' => $request,
-            'requests' => $reqs,
+            'data' => $reqs,
             'totalRecords' => $count,
-            'rows' => $reqs,
+            '_benchmark' => microtime(true) -  $this->time_start
         ]);
-
     }
 }

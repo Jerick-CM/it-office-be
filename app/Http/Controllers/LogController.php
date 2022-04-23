@@ -116,22 +116,66 @@ class LogController extends Controller
     public function request_datatable(Request $request)
     {
 
-        $limit = $request->has('perPage') ? $request->get('perPage') : 10;
+        if ($request->sort[0]['type'] == ""  ||  $request->sort[0]['field'] == "" ||   $request->sort[0]['type'] == "none") {
 
-        $reqs = UserLogin::with('user')
-            ->orderBy('id', 'desc')
-            ->offset(($request->page - 1) * $limit)
-            ->take($request->perPage)
-            ->get();
+            $limit = $request->has('perPage') ? $request->get('perPage') : 10;
+            // with('user')
+            $reqs =
+                // UserLogin::with('user')
+                UserLogin::join('users', 'users.id', '=', 'user_logins.user_id')
 
-        $count =   UserLogin::with('user')->get()->count();
+                ->select('user_logins.*', 'users.name', 'users.email', 'users.username')
+                ->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['user_logins.id', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['user_logins.browser', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orderBy('is_approved', 'ASC')
+                ->offset(($request->page - 1) * $limit)
+                ->take($request->perPage)
+                ->get();
+
+            foreach ($reqs as $key => $value) {
+
+                $reqs[$key]['created'] = Carbon::parse($value['created_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+                $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+            }
+
+            $count =   UserLogin::with('user')->get()->count();
+            $query = 1;
+        } else {
+            $query = 2;
+            $limit = $request->has('perPage') ? $request->get('perPage') : 10;
+            // with('user')
+            $reqs =
+                // UserLogin::with('user')
+                UserLogin::join('users', 'users.id', '=', 'user_logins.user_id')
+                ->select('user_logins.*', 'users.name', 'users.email', 'users.username')
+                ->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['user_logins.id', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['user_logins.browser', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->offset(($request->page - 1) * $limit)
+                ->take($request->perPage)
+                ->orderBy($request->sort[0]['field'], strtoupper($request->sort[0]['type']))
+                ->get();
+
+            foreach ($reqs as $key => $value) {
+
+                $reqs[$key]['created'] = Carbon::parse($value['created_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+                $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
+            }
+
+            $count =   UserLogin::with('user')->get()->count();
+        }
 
         return response()->json([
+            'query' =>  $query,
+            'sort-field' => $request->sort[0]['field'],
+            'sort-type' => strtoupper($request->sort[0]['type']),
             'page' => $request->page,
-            // 'req' => $request,
-            'requests' => $reqs,
+            'data' => $reqs,
             'totalRecords' => $count,
-            'rows' => $reqs,
+            '_benchmark' => microtime(true) -  $this->time_start
         ]);
     }
 }
