@@ -10,7 +10,6 @@ use App\Models\UserDetails;
 use App\Models\Socials;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
-use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Events\UserLogsEvent;

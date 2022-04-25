@@ -49,9 +49,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = [
-        'name_email', 'fullname'
-    ];
+    // protected $appends = [
+    //     'name_email', 'fullname'
+    // ];
 
     public function social()
     {
@@ -101,10 +101,10 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function getNameEmailAttribute()
-    {
-        return $this->attributes['name'] . " and " . $this->attributes['email'];
-    }
+    // public function getNameEmailAttribute()
+    // {
+    //     return $this->attributes['name'] . " and " . $this->attributes['email'];
+    // }
 
     public function getFullnameAttribute()
     {

@@ -8,6 +8,14 @@ use App\Models\UserLogin;
 use Carbon\Carbon;
 
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+use PhpOffice\PhpSpreadsheet\Writer as Writer;
+
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RequestLoginExport;
+
 class LogController extends Controller
 {
     public function index(Request $request)
@@ -113,6 +121,7 @@ class LogController extends Controller
     }
 
 
+
     public function request_datatable(Request $request)
     {
 
@@ -179,5 +188,11 @@ class LogController extends Controller
             'totalRecords' => $count,
             '_benchmark' => microtime(true) -  $this->time_start
         ]);
+
+    }
+
+    public function export()
+    {
+        return Excel::download(new RequestLoginExport, 'loginrequests-'.Carbon::now().'.xlsx');
     }
 }

@@ -87,6 +87,7 @@ class LoginController extends Controller
                 'success' => true,
                 '_benchmark' => microtime(true) -  $this->time_start,
             ], 200);
+
         } else {
 
             // $users =  DB::table('users')->insert([
@@ -139,11 +140,10 @@ class LoginController extends Controller
 
             $req = UserLogin::create([
                 'user_id' => $user->id,
-                'browser' => $request->browser
+                'browser' => json_encode($request->browser)
             ]);
 
             return response()->json([
-
 
                 'userId' => $user->id,
                 'message' => 'Login request sent!',

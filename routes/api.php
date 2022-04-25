@@ -120,3 +120,9 @@ Route::group(['prefix' => 'logs', 'middleware' => 'throttle:500,1'], function ()
 
     Route::post('/datatable', [LogController::class, 'datatable']);
 });
+
+Route::group(['prefix' => 'export', 'middleware' => 'throttle:500,1'], function () {
+
+    Route::get('users', [UsersController::class, 'export']);
+
+});

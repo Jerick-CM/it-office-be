@@ -17,6 +17,16 @@ use App\Models\AdminUsersLogs;
 use App\Events\UserLogsEvent;
 use App\Events\ApproveLoginEvent;
 
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+use PhpOffice\PhpSpreadsheet\Writer as Writer;
+
+
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class UserController extends Controller
 {
     /**
@@ -542,7 +552,6 @@ class UserController extends Controller
     public function data_table(Request $request)
     {
 
-
         if ($request->sort[0]['type'] == ""  ||  $request->sort[0]['field'] == "" ||   $request->sort[0]['type'] == "none") {
             $limit = $request->has('perPage') ? $request->get('perPage') : 10;
 
@@ -583,5 +592,19 @@ class UserController extends Controller
             'totalRecords' => $count,
             '_benchmark' => microtime(true) -  $this->time_start
         ]);
+    }
+
+    public function userexport()
+    {
+
+        return Excel::download(new UsersExport, 'users-' . Carbon::now() . '.xlsx');
+    }
+
+
+    public function export()
+    {
+        ob_end_clean();
+        ob_start();
+        return Excel::download(new UserExport, 'users.xls');
     }
 }
