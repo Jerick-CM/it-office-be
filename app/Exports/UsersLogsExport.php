@@ -78,6 +78,7 @@ class UsersLogsExport implements FromCollection, WithHeadings, WithMapping, With
         return ["No", "Name", "E-mail", "Description", "Data / Time"];
     }
 
+
     public function map($user): array
     {
         $this->count++;
