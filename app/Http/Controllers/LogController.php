@@ -144,6 +144,7 @@ class LogController extends Controller
             $query = 1;
 
         } else {
+
             $query = 2;
             $limit = $request->has('perPage') ? $request->get('perPage') : 10;
             // with('user')
