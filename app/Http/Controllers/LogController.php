@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\AdminUsersLogs;
 use App\Models\UserLogin;
 use Carbon\Carbon;
+use App\Exports\RequestLoginExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class LogController extends Controller
@@ -179,5 +181,9 @@ class LogController extends Controller
             'totalRecords' => $count,
             '_benchmark' => microtime(true) -  $this->time_start
         ]);
+    }
+
+    public function export(){
+        return Excel::download(new RequestLoginExport, 'requestlogin-'.Carbon::now().'.xlsx');
     }
 }

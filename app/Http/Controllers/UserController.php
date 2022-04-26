@@ -20,6 +20,10 @@ use App\Http\Requests\UserStoreRequest;
 use App\Events\UserLogsEvent;
 use App\Events\ApproveLoginEvent;
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 class UserController extends Controller
 {
     /**
@@ -614,6 +618,11 @@ class UserController extends Controller
             'data' => $reqs,
             'totalRecords' => $count,
             '_benchmark' => microtime(true) -  $this->time_start
+
         ]);
+    }
+
+    public function export(){
+        return Excel::download(new UsersExport, 'users-'.Carbon::now().'.xlsx');
     }
 }
