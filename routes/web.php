@@ -12,8 +12,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LogController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('users/export/', [UserController::class, 'export']);
+Route::get('login-request/export/', [LogController::class, 'export']);
