@@ -21,3 +21,4 @@ Route::get('/', function () {
 
 Route::get('users/export/', [UserController::class, 'export']);
 Route::get('login-request/export/', [LogController::class, 'export']);
+Route::get('user-logs/export/', [LogController::class, 'userlogs_export']);
