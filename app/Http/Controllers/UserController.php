@@ -9,10 +9,13 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+// models
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\UserDetails;
 use App\Models\AdminUsersLogs;
+// requests
+use App\Http\Requests\UserStoreRequest;
 // event
 use App\Events\UserLogsEvent;
 use App\Events\ApproveLoginEvent;
@@ -45,9 +48,25 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        //
+        $user = User::create(array_merge($request->except('first_name', 'last_name', 'password'), [
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'password' => bcrypt($request->password)
+        ]));
+
+        if ($request->is_admin) {
+            DB::table('role_user')->insert([
+                'user_id' => $user->id,
+                'role_id' => 1,
+                'created_at' =>  now(),
+                'updated_at' =>  now(),
+            ]);
+        }
+
+        return response()->json([
+            'user' => $user
+        ]);
     }
 
     /**
@@ -56,9 +75,17 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $user = User::findOrFail($request->id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        return response()->json([
+            'user' => $user
+        ]);
     }
 
     /**
@@ -81,7 +108,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->update($request->all());
+
+        return response()->json([
+            'message' => 'User successfully updated!'
+        ]);
     }
 
     /**

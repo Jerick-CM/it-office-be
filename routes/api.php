@@ -101,6 +101,12 @@ Route::group(['prefix' => 'user', 'middleware' => 'throttle:500,1'], function ()
     Route::post('/update_username/{id}', [UserController::class, 'update_name']);
 
     Route::post('/register', [UserController::class, 'register_admin']);
+
+    Route::post('/create', [UserController::class, 'store']);
+
+    Route::post('/show/{id}', [UserController::class, 'show']);
+
+    Route::post('/update/{id}', [UserController::class, 'update']);
 });
 
 Route::group(['prefix' => 'role', 'middleware' => 'throttle:500,1'], function () {

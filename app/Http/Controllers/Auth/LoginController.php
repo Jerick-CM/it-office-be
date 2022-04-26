@@ -139,7 +139,7 @@ class LoginController extends Controller
 
             $req = UserLogin::create([
                 'user_id' => $user->id,
-                'browser' => $request->browser
+                // 'browser' => $request->browser
             ]);
 
             return response()->json([
