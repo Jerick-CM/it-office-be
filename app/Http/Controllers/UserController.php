@@ -50,8 +50,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $user = User::create(array_merge($request->except('first_name', 'last_name', 'password'), [
-            'name' => $request->first_name . ' ' . $request->last_name,
+        $user = User::create(array_merge($request->except('password'), [
             'password' => bcrypt($request->password)
         ]));
 
