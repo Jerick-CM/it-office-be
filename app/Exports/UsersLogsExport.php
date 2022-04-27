@@ -24,10 +24,10 @@ class UsersLogsExport implements FromCollection, WithHeadings, WithMapping, With
 
     // protected $id;
 
-    // function __construct($id)
-    // {
-    //     $this->id = $id;
-    // }
+    function __construct($id)
+    {
+        $this->id = $id;
+    }
 
     public function styles(Worksheet $sheet)
     {
@@ -66,14 +66,22 @@ class UsersLogsExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function collection()
     {
-        return AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
-            ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
-            ->get();
+
+        if ($this->id != "-1") {
+            return AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
+                ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
+                ->where('admin_users_logs.user_id', $this->id)
+                ->get();
+        } else {
+            return AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
+                ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
+                ->get();
+        }
     }
 
     public function headings(): array
     {
-        return ["No", "Name", "E-mail", "Description", "Data / Time"];
+        return ["No", "Name", "E-mail", "Description", "Data / Time";
     }
 
 
@@ -86,6 +94,7 @@ class UsersLogsExport implements FromCollection, WithHeadings, WithMapping, With
             $user->email,
             $user->description,
             Carbon::parse($user->created_at)->isoFormat('HH:mm - MMM Do YYYY '),
+
         ];
     }
 }

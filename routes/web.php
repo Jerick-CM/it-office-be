@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\Admin\LogController as LogConAdmin;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,4 +23,4 @@ Route::get('/', function () {
 
 Route::get('users/export/', [UserController::class, 'export']);
 Route::get('login-request/export/', [LogController::class, 'export']);
-Route::get('user-logs/export/', [LogController::class, 'userlogs_export']);
+Route::get('user-logs/export/', [LogConAdmin::class, 'userlogs_export']);

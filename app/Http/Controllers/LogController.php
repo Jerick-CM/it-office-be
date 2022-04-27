@@ -277,6 +277,6 @@ class LogController extends Controller
         ob_end_clean();
         ob_start();
         // to avoid file corruption add end
-        return Excel::download(new UsersLogsExport($request->id), Str::slug('userlogs-' . Carbon::now()) . '.xlsx');
+        return Excel::download(new UsersLogsExport($request->user()->id), Str::slug('userlogs-' . Carbon::now()) . '.xlsx');
     }
 }
