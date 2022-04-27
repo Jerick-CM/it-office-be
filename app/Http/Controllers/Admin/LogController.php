@@ -24,17 +24,22 @@ class LogController extends Controller
         if ($request->sort[0]['type'] == ""  ||  $request->sort[0]['field'] == "" ||   $request->sort[0]['type'] == "none") {
 
             $limit = $request->has('perPage') ? $request->get('perPage') : 10;
-
+            // with('user')
             $reqs =
-
+                // UserLogin::with('user')
                 AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
                 ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
                 ->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]])
+                // ->where('admin_users_logs.user_id', $request->user()->id)
+                // ->where(function ($query) use ($request) {
+                //     $query->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                //         ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
+                //         ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]]);
+                // })
                 ->offset(($request->page - 1) * $limit)
                 ->take($request->perPage)
-                // ->orderBy('created_at','DESC')
                 ->get();
 
             foreach ($reqs as $key => $value) {
@@ -43,22 +48,26 @@ class LogController extends Controller
                 $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
             }
 
-            $count =   UserLogin::with('user')->get()->count();
+            $count =   AdminUsersLogs::get()->count();
             $query = 1;
-
         } else {
 
             $query = 2;
             $limit = $request->has('perPage') ? $request->get('perPage') : 10;
-
+            // with('user')
             $reqs =
-
+                // UserLogin::with('user')
                 AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
-                ->select('user_logins.*', 'users.name', 'users.email', 'users.username')
+                ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
                 ->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['user_logins.id', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['user_logins.browser', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]])
+                // ->where('admin_users_logs.user_id', $request->user()->id)
+                // ->where(function ($query) use ($request) {
+                //     $query->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                //         ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
+                //         ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]]);
+                // })
                 ->offset(($request->page - 1) * $limit)
                 ->take($request->perPage)
                 ->orderBy($request->sort[0]['field'], strtoupper($request->sort[0]['type']))
@@ -70,10 +79,11 @@ class LogController extends Controller
                 $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
             }
 
-            $count =   UserLogin::with('user')->get()->count();
+            $count =   AdminUsersLogs::get()->count();
         }
 
         return response()->json([
+            '_user' => $request->user()->id,
             'query' =>  $query,
             'sort-field' => $request->sort[0]['field'],
             'sort-type' => strtoupper($request->sort[0]['type']),

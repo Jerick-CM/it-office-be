@@ -212,9 +212,11 @@ class LogController extends Controller
                 AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
                 ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
                 ->where('admin_users_logs.user_id', $request->user()->id)
-                ->orwhere([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->where(function ($query) use ($request) {
+                    $query->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                        ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
+                        ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]]);
+                })
                 ->offset(($request->page - 1) * $limit)
                 ->take($request->perPage)
                 ->get();
@@ -237,10 +239,11 @@ class LogController extends Controller
                 AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
                 ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
                 ->where('admin_users_logs.user_id', $request->user()->id)
-                ->orwherewhere([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]])
-                // ->orWhere([['user_logins.browser', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->where(function ($query) use ($request) {
+                    $query->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                        ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
+                        ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]]);
+                })
                 ->offset(($request->page - 1) * $limit)
                 ->take($request->perPage)
                 ->orderBy($request->sort[0]['field'], strtoupper($request->sort[0]['type']))
@@ -275,7 +278,5 @@ class LogController extends Controller
         ob_start();
         // to avoid file corruption add end
         return Excel::download(new UsersLogsExport($request->id), Str::slug('userlogs-' . Carbon::now()) . '.xlsx');
-
-        // return Excel::download(new UsersLogsExport($request->id), 'userlogs.xlsx');
     }
 }
