@@ -12,8 +12,9 @@ use App\Exports\RequestLoginExport;
 use App\Exports\UsersExport;
 use App\Exports\UsersLogsExport;
 
+//helper lib
 use Maatwebsite\Excel\Facades\Excel;
-
+use Illuminate\Support\Str;
 
 class LogController extends Controller
 {
@@ -190,6 +191,10 @@ class LogController extends Controller
 
     public function export()
     {
+        // to avoid file corruption add start
+        ob_end_clean();
+        ob_start();
+        // to avoid file corruption add end
         return Excel::download(new RequestLoginExport, 'requestlogin-' . Carbon::now() . '.xlsx');
     }
 
@@ -206,7 +211,8 @@ class LogController extends Controller
                 // UserLogin::with('user')
                 AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
                 ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
-                ->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->where('admin_users_logs.user_id', $request->user()->id)
+                ->orwhere([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->offset(($request->page - 1) * $limit)
@@ -219,7 +225,7 @@ class LogController extends Controller
                 $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
             }
 
-            $count =   UserLogin::with('user')->get()->count();
+            $count =   AdminUsersLogs::where('admin_users_logs.user_id', $request->user()->id)->get()->count();
             $query = 1;
         } else {
 
@@ -229,11 +235,12 @@ class LogController extends Controller
             $reqs =
                 // UserLogin::with('user')
                 AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
-                ->select('user_logins.*', 'users.name', 'users.email', 'users.username')
-                ->where([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
+                ->where('admin_users_logs.user_id', $request->user()->id)
+                ->orwherewhere([['users.name', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->orWhere([['users.email', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['user_logins.id', 'LIKE', "%" . $request->searchTerm . "%"]])
-                ->orWhere([['user_logins.browser', 'LIKE', "%" . $request->searchTerm . "%"]])
+                ->orWhere([['admin_users_logs.id', 'LIKE', "%" . $request->searchTerm . "%"]])
+                // ->orWhere([['user_logins.browser', 'LIKE', "%" . $request->searchTerm . "%"]])
                 ->offset(($request->page - 1) * $limit)
                 ->take($request->perPage)
                 ->orderBy($request->sort[0]['field'], strtoupper($request->sort[0]['type']))
@@ -245,10 +252,11 @@ class LogController extends Controller
                 $reqs[$key]['updated'] = Carbon::parse($value['updated_at'])->isoFormat('HH:mm - MMM Do YYYY ');
             }
 
-            $count =   UserLogin::with('user')->get()->count();
+            $count =   AdminUsersLogs::where('admin_users_logs.user_id', $request->user()->id)->get()->count();
         }
 
         return response()->json([
+            '_user' => $request->user()->id,
             'query' =>  $query,
             'sort-field' => $request->sort[0]['field'],
             'sort-type' => strtoupper($request->sort[0]['type']),
@@ -261,6 +269,13 @@ class LogController extends Controller
 
     public function userlogs_export(Request $request)
     {
-        return Excel::download(new UsersLogsExport($request->id), 'userlogs-' . Carbon::now() . '.xlsx');
+        //
+        // to avoid file corruption add start
+        ob_end_clean();
+        ob_start();
+        // to avoid file corruption add end
+        return Excel::download(new UsersLogsExport($request->id), Str::slug('userlogs-' . Carbon::now()) . '.xlsx');
+
+        // return Excel::download(new UsersLogsExport($request->id), 'userlogs.xlsx');
     }
 }

@@ -79,7 +79,7 @@ class RequestLoginExport implements FromCollection, WithHeadings, WithMapping, W
 
     public function headings(): array
     {
-        return ["No", "Name", "Username", "E-mail", "Admin Account", "Data / Time"];
+        return ["No", "Name", "Username", "Browser", "E-mail", "Admin Account", "Data / Time"];
     }
 
     public function map($user): array
@@ -93,7 +93,7 @@ class RequestLoginExport implements FromCollection, WithHeadings, WithMapping, W
             $user->email,
             (string) ($user->browser),
             Carbon::parse($user->created_at)->isoFormat('HH:mm - MMM Do YYYY '),
-            $user->is_approved == 1 ? "Apprpved" : "Pending"
+            $user->is_approved == 1 ? "Approved" : "Pending"
         ];
     }
 }

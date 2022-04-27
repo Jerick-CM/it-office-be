@@ -6,7 +6,6 @@ use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -14,7 +13,6 @@ use Carbon\Carbon;
 
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-
 
 class UsersExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths, WithStyles
 {
@@ -25,12 +23,6 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, WithColu
     public function styles(Worksheet $sheet)
     {
         return [
-
-            // Style the first row as bold text.
-            // 1    => ['font' => ['bold' => true]],
-            // Styling an entire column.
-            // 'C'  => ['font' => ['size' => 16]],
-            // Styling a specific cell by coordinate.
             'A1' => ['font' => ['bold' => true]],
             'B1' => ['font' => ['bold' => true]],
             'C1' => ['font' => ['bold' => true]],

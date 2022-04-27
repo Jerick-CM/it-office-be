@@ -622,7 +622,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function export(){
-        return Excel::download(new UsersExport, 'users-'.Carbon::now().'.xlsx');
+    public function export()
+    {
+        // to avoid file corruption add start
+        ob_end_clean();
+        ob_start();
+        // to avoid file corruption add end
+        return Excel::download(new UsersExport, 'users-' . Carbon::now() . '.xls');
     }
 }

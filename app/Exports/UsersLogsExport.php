@@ -4,18 +4,17 @@ namespace App\Exports;
 
 use App\Models\User;
 use App\Models\AdminUsersLogs;
+
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-
-use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use Carbon\Carbon;
-
 use Maatwebsite\Excel\Concerns\WithStyles;
+
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
+use Carbon\Carbon;
 
 class UsersLogsExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths, WithStyles
 {
@@ -23,12 +22,12 @@ class UsersLogsExport implements FromCollection, WithHeadings, WithMapping, With
     use Exportable;
     public $count;
 
-    protected $id;
+    // protected $id;
 
-    function __construct($id)
-    {
-        $this->id = $id;
-    }
+    // function __construct($id)
+    // {
+    //     $this->id = $id;
+    // }
 
     public function styles(Worksheet $sheet)
     {
@@ -69,7 +68,6 @@ class UsersLogsExport implements FromCollection, WithHeadings, WithMapping, With
     {
         return AdminUsersLogs::join('users', 'users.id', '=', 'admin_users_logs.user_id')
             ->select('admin_users_logs.*', 'users.name', 'users.email', 'users.username')
-            // ->where('admin_users_logs.user_id', $this->id)
             ->get();
     }
 
