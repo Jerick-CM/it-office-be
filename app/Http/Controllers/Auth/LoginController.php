@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Mail;
 // models
 use App\Models\User;
 use App\Models\UserLogin;
@@ -81,7 +82,15 @@ class LoginController extends Controller
         if ($user) {
 
             $token = $user->getToken();
-            $user->notify(new SendVerificationEmail($token));
+            // $user->notify(new SendVerificationEmail($token));
+            $to_name = $user->name;
+            $to_email = $user->email;
+            $data = ['name' => $user->name, 'token' => $token];
+
+            Mail::send('mail.verification', $data, function($message) use ($to_name, $to_email) {
+                $message->to($to_email, $to_name)->subject('IT Office - Login Verification');
+                $message->from('support@itoffice.maloloscity.gov.ph', 'IT Office - City Government of Malolos');
+            });
 
             return response()->json([
                 'success' => true,

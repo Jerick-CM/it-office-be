@@ -107,6 +107,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'throttle:500,1'], function ()
     Route::post('/show/{id}', [UserController::class, 'show']);
 
     Route::post('/update/{id}', [UserController::class, 'update']);
+
+    Route::post('/delete/{user}', [UserController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'role', 'middleware' => 'throttle:500,1'], function () {
