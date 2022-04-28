@@ -126,5 +126,5 @@ Route::group(['prefix' => 'role', 'middleware' => 'throttle:500,1'], function ()
 
 Route::group(['prefix' => 'logs', 'middleware' => 'throttle:500,1'], function () {
 
-    Route::post('/datatable', [LogController::class, 'datatable']);
+    Route::post('/user/data-table', [LogController::class, 'userlogs_datatable']);
 });
